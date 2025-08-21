@@ -1,0 +1,54 @@
+services:
+  app1:
+    build:
+      context: ./app1
+      dockerfile: Dockerfile
+    container_name: app1
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./app1/.env
+    environment:
+      - PORT=8080
+      # endpoint OTLP
+      - OTEL_EXPORTER_OTLP_ENDPOINT=jaeger:4318
+      - APP2_BASE_URL=http://app2:8083
+    restart: unless-stopped
+    networks:
+      - lab02_network
+
+  app2:
+    build:
+      context: ./app2
+      dockerfile: Dockerfile
+    container_name: app2
+    ports:
+      - "8083:8083"
+    env_file:
+      - ./app2/.env
+    environment:
+      - PORT=8083
+      # endpoint OTLP
+      - OTEL_EXPORTER_OTLP_ENDPOINT=jaeger:4318
+    restart: unless-stopped
+    networks:
+      - lab02_network
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.57
+    container_name: jaeger
+    ports:
+      # UI
+      - "16686:16686"
+      # OTLP/HTTP
+      - "4318:4318"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    restart: unless-stopped
+    networks:
+      - lab02_network
+
+networks:
+  lab02_network:
+    driver: bridge
+    name: lab02_network
