@@ -58,8 +58,8 @@ Esta é a forma mais simples de subir todos os serviços (`app1`, `app2`, e `jae
 
 1.  **Clone o repositório:**
     ```bash
-    git clone <URL_DO_SEU_REPOSITORIO>
-    cd <NOME_DA_PASTA>
+    git clone git@github.com:psaraiva/l02.git
+    cd l02
     ```
 
 3.  **Configure a API Key:**
